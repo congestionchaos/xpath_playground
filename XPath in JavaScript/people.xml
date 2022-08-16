@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<people>
+
+    <person first-name="eric" middle-initial="H" last-name="jung">
+        <adress street="321 south st" city="denver" state="co" country="usa"/>
+        <adress street="123 main st" city="arlington" state="ma" country="usa"/>
+    </person>
+
+    <person first-name="jed" last-name="brown">
+        <adress street="321 north st" city="atlanta" state="ga" country="usa"/>
+        <adress street="123 west st" city="seattle" state="wa" country="usa"/>
+        <adress street="321 south avenue" city="denver" state="co" country="usa"/>
+    </person>
+
+</people>
