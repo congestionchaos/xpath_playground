@@ -8,6 +8,7 @@ xhttp.onreadystatechange = function() {
         showTasks(xhttp.responseXML);
         getTaskID(xhttp.responseXML, "pre-therapeutic MDT meeting");
         getTaskIDwithSnapshot(xhttp.responseXML);
+        getTasksandActors(xhttp.responseXML);
     }
 };
 // furniture XML example is used since it has two different namespaces
@@ -161,9 +162,11 @@ function getTaskID(xml,name){
 function getTaskIDwithSnapshot(xml){
     // in order to retrieve specific nodes of a XPathResult node set the individual nodes can be accessed with "snapshitItem(itemNumber)"
     let taskidpath = "//*[local-name()='task']/@id";
-    alltasks = xml.evaluate(taskidpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    let alltasks = xml.evaluate(taskidpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    // XPathResult Type cannot be "ANY_TYPE" because then the Result would be of "UNORDERED_ITERATOR_TYPE"
+    // the for-loop would not work on an Iterator-Type Result
     console.log(alltasks);
-    txt ="The Tasks in the XML are: <br>";
+    let txt ="The Tasks in the XML are: <br>";
     for(let i = 0; i <alltasks.snapshotLength; i++){
         console.log("testing the loop.." + "this is loop nr." + i);
         console.log(alltasks.snapshotItem(i).textContent);
@@ -171,6 +174,36 @@ function getTaskIDwithSnapshot(xml){
     }
     console.log(txt);
     document.getElementById("snapshotitems").innerHTML =txt;
+}
+
+function getTasksandActors(xml){
+    // copy-pasta from getTaskIDwithSnapshot function:
+    let taskidpath = "//*[local-name()='task']/@id";
+    let alltasks = xml.evaluate(taskidpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    let actornamepath = "//*[local-name()='task']/*/@name";
+    let txt ="The Tasks in the XML are: <br>";
+    console.log(alltasks.snapshotLength);
+    for(let i = 0; i <alltasks.snapshotLength; i++){
+        console.log("testing the outer loop.." + "this is loop nr." + i);
+        console.log(alltasks.snapshotItem(i).textContent);
+        txt += alltasks.snapshotItem(i).textContent + "<br>";
+
+        // using the TaskID that was just retrieved, a new XPath expression can be build:
+        let actorsintask = "//*[local-name()='task' and @id='" +alltasks.snapshotItem(i).textContent + "']/*/@name";
+        console.log(actorsintask);
+        let allactors = xml.evaluate(actorsintask, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+        console.log(allactors.snapshotLength);
+        txt += "The Actors in this task are: <br>";
+        // inner loop should retrieve all actors of a given task
+        for (let i = 0; i <allactors.snapshotLength; i++){
+            console.log("testing the inner loop.." + "this is loop nr." + i);
+            console.log(allactors.snapshotItem(i).textContent);
+            txt += "("+ i +") " + allactors.snapshotItem(i).textContent + ", ";
+        }
+        txt += "<br>";
+    }
+    console.log(txt);
+    document.getElementById("TasksandActors").innerHTML =txt;
 }
 
 
