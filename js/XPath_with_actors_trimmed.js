@@ -7,6 +7,7 @@ xhttp.onreadystatechange = function() {
         showAttributes(xhttp.responseXML);
         showTasks(xhttp.responseXML);
         getTaskID(xhttp.responseXML, "pre-therapeutic MDT meeting");
+        getTaskIDwithSnapshot(xhttp.responseXML);
     }
 };
 // furniture XML example is used since it has two different namespaces
@@ -155,6 +156,21 @@ function getTaskID(xml,name){
     }
     console.log(taskIDtxt);
     document.getElementById("taskID_demo").innerHTML = taskIDtxt;
+}
+
+function getTaskIDwithSnapshot(xml){
+    // in order to retrieve specific nodes of a XPathResult node set the individual nodes can be accessed with "snapshitItem(itemNumber)"
+    let taskidpath = "//*[local-name()='task']/@id";
+    alltasks = xml.evaluate(taskidpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    console.log(alltasks);
+    txt ="The Tasks in the XML are: <br>";
+    for(let i = 0; i <alltasks.snapshotLength; i++){
+        console.log("testing the loop.." + "this is loop nr." + i);
+        console.log(alltasks.snapshotItem(i).textContent);
+       txt += alltasks.snapshotItem(i).textContent + "<br>";
+    }
+    console.log(txt);
+    document.getElementById("snapshotitems").innerHTML =txt;
 }
 
 
