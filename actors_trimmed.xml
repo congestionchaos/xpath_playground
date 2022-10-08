@@ -2,6 +2,7 @@
 <hospital xmlns:bpmn2="http://omg.org/spec/BPMN/20100524/MODEL" xmlns:cp="http://helict.de/bpmn4cp">
     <bpmn2:stage>
         <bpmn2:task id="Task_0u3mnxs" name="preparation of MDT meeting">
+            <bpmn2:extensionElements>
             <cp:actor name="Aesthetician"/>
             <cp:actor name="Anatomic-pathologist" />
             <cp:actor name="Anesthetist"/>
@@ -12,9 +13,11 @@
             <cp:actor name="Nurse specialized in oncology"/>
             <cp:actor name="Onco-geriatrician"/>
             <cp:actor name="Pain specialist"/>
+            </bpmn2:extensionElements>
         </bpmn2:task>
 
         <bpmn2:task id="Task_1c9f2fd" name="pre-therapeutic MDT meeting">
+            <bpmn2:extensionElements>
             <cp:actor name="Aesthetician"/>
             <cp:actor name="Anatomic-pathologist" />
             <cp:actor name="Anesthetist"/>
@@ -29,6 +32,40 @@
             <cp:actor name="Social worker"/>
             <cp:actor name="Stoma therapist"/>
             <cp:actor name="Surgeon"/>
+            </bpmn2:extensionElements>
+        </bpmn2:task>
+
+        <bpmn2:task id="Task_0b1yj4c" name="end-of-life care">
+        <bpmn2:extensionElements>
+            <cp:actor name="Anesthetist" code="anesthetist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Case manager" code="case_manager" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Dietitian" code="dietitian" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Foundations" code="foundations" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Gastroenterologist" code="gastroenterologist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="General practitioner" code="general_practitioner" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Hospital pharmacist" code="hospital_pharmacist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Medical oncologist" code="medical_oncologist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Nurse specialized in oncology" code="nurse_specialized_in_oncology" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Onco-geriatrician" code="onco-geriatrician" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Oncology care team" code="oncology_care_team" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Organ specialist doctor" code="organ_specialist_doctor" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Pain specialist" code="pain_specialist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Palliative care nurse" code="palliative_care_nurse" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Palliative care team" code="palliative_care_at_home" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Patient support groups" code="patient_support_groups" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Physiotherapist" code="physiotherapist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Psychologist" code="psychologist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Radiotherapist" code="radiotherapist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Social worker" code="social_worker" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Socio-aesthetician" code="socio-aesthetician" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Specialist in palliative care" code="specialist_in_palliative_care" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Specialist in post-oncology rehabilitation" code="specialist_in_post-oncology_rehabilitation" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Spiritual guidance" code="spiritual_guidance" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Stoma therapist" code="stoma_therapist" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Surgeon" code="surgeon" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Volunteers" code="volunteers" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+            <cp:actor name="Work medicine" code="work_medicine" codeSystem="https://www.helict.de/fhir/CodeSystem/lux/actors" />
+        </bpmn2:extensionElements>
         </bpmn2:task>
 
     </bpmn2:stage>

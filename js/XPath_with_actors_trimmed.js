@@ -11,7 +11,7 @@ xhttp.onreadystatechange = function() {
         getTasksandActors(xhttp.responseXML);
     }
 };
-// furniture XML example is used since it has two different namespaces
+// actors trimmed is used for simplicity
 xhttp.open("GET", "actors_trimmed.xml", true);
 xhttp.send();
 
@@ -19,14 +19,11 @@ function showResult(xml, variant) {
     //var variant = "";
     switch (variant) {
         case "Who is the last actor in the first task?":
-            // the table uses the "f" namespace
             path = "string(//*[name()='cp:actor'][last()]/@name)";  // the "Select any"-Operator: '//' will always select the 1st task
                                                                     // to explicitly reference the 1st task it is necessary to specify the selection
                                                                     // using "and" + "position()=desiredtaskposition"
             // path ="string(//*[local-name()='task' and position()=1]/*[name()='cp:actor'][last()]/@name)" ;
             // should be the same as: path = "string(//*[name()='cp:actor'][last()]/@name)";
-
-            //xmlnamespace = 'https://www.w3schools.com/furniture';
             break;
         case "Who is the 11th actor in the 2nd task?":
             path = "string(//*[local-name()='task' and position()=2]/*[name()='cp:actor'][position()=11]/@name)";
@@ -86,13 +83,13 @@ function showAttributes(xml){
     let nrofattr = parseInt(numberofattributes.stringValue);
     console.log(nrofattr);
     let testnumber = 3;
-    let testpath = "string(//*[local-name()='task' and position()=2]/*[local-name()='actor' and position()=" +testnumber.toString()+"]/@name)";
+    let testpath = "string(//*[local-name()='task' and position()=2]/*[local-name()='extensionElements']/*[local-name()='actor' and position()=" +testnumber.toString()+"]/@name)";
     console.log("the testpath is working.. " + testpath);
     let testpathresult = xml.evaluate(testpath, xml, null, XPathResult.STRING_TYPE, null);
     console.log(testpathresult.stringValue);
     for(let i = 1; i <nrofattr+1; i++ ){
         console.log("this is loop nr.: " + i +"[starting with 1]");
-        stringattrpath = "string(//*[local-name()='task' and position()=2]/*[local-name()='actor' and position()=" +i.toString()+"]/@name)";
+        stringattrpath = "string(//*[local-name()='task' and position()=2]/*[local-name()='extensionElements']/*[local-name()='actor' and position()=" +i.toString()+"]/@name)";
         console.log(stringattrpath);
         stringattrpathresult = xml.evaluate(stringattrpath, xml, null, XPathResult.STRING_TYPE, null);
         console.log(stringattrpathresult);
@@ -112,8 +109,8 @@ function showTasks(xml){
     let nroftasks = parseInt(numberoftasks.stringValue);
     console.log(nroftasks);
     for(let i =1; i<nroftasks+1; i++){
-        stringtaskpath = "string(//*[local-name()='task' and position() = " +i.toString() + "]/@name)";
-        console.log(stringattrpath);
+        stringtaskpath = "string(//*[local-name()='task' and position() = " +i.toString() + "]/*[local-name()='extensionElements']/@name)";
+        console.log(stringtaskpath);
         stringtaskpathresult = xml.evaluate(stringtaskpath, xml, null, XPathResult.STRING_TYPE, null);
         console.log(stringtaskpathresult);
         tasktxt += stringtaskpathresult.stringValue + "<br>";
@@ -189,7 +186,7 @@ function getTasksandActors(xml){
         txt += alltasks.snapshotItem(i).textContent + "<br>";
 
         // using the TaskID that was just retrieved, a new XPath expression can be build:
-        let actorsintask = "//*[local-name()='task' and @id='" +alltasks.snapshotItem(i).textContent + "']/*/@name";
+        let actorsintask = "//*[local-name()='task' and @id='" +alltasks.snapshotItem(i).textContent + "']/*[local-name()='extensionElements']/*/@name";
         console.log(actorsintask);
         let allactors = xml.evaluate(actorsintask, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
         console.log(allactors.snapshotLength);
