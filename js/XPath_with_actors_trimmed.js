@@ -26,13 +26,14 @@ function showResult(xml, variant) {
             // should be the same as: path = "string(//*[name()='cp:actor'][last()]/@name)";
             break;
         case "Who is the 11th actor in the 2nd task?":
-            path = "string(//*[local-name()='task' and position()=2]/*[name()='cp:actor'][position()=11]/@name)";
+            path = "string(//*[local-name()='task' and position()=2]/*[local-name()='extensionElements']/*[name()='cp:actor'][position()=11]/@name)";
             break;
         case "What is the name of the 2nd task?":
-            path = "string(//*[local-name()='task' and position()=2]/@name)";
+            path = "string(//*[local-name()='task' and position()=2]/*[local-name()='extensionElements']/@name)";
             break;
         case "How many actors do we have?":
-            path = "count(//*[local-name()='task' and position()=2]/*[local-name()='actor'])";
+            // has to be refactored to only include unique actors
+            path = "count(//*[local-name()='task' and position()=2]/*[local-name()='extensionElements']/*[local-name()='actor'])";
             break;
         default:
             variant = "default";
@@ -77,7 +78,7 @@ function showResult(xml, variant) {
 
 function showAttributes(xml){
     var attrtxt ="You've asked for all actors and here they are.. <br>" ;
-    let countpath = "count(//*[local-name()='task' and position()=2]/*[local-name()='actor'])";
+    let countpath = "count(//*[local-name()='task' and position()=2]/*[local-name()='extensionElements']/*[local-name()='actor'])";
     let numberofattributes = xml.evaluate(countpath,xml, null, XPathResult.STRING_TYPE, null);
     console.log(numberofattributes);
     let nrofattr = parseInt(numberofattributes.stringValue);
@@ -109,7 +110,7 @@ function showTasks(xml){
     let nroftasks = parseInt(numberoftasks.stringValue);
     console.log(nroftasks);
     for(let i =1; i<nroftasks+1; i++){
-        stringtaskpath = "string(//*[local-name()='task' and position() = " +i.toString() + "]/*[local-name()='extensionElements']/@name)";
+        stringtaskpath = "string(//*[local-name()='task' and position() = " +i.toString() + "]/@name)";
         console.log(stringtaskpath);
         stringtaskpathresult = xml.evaluate(stringtaskpath, xml, null, XPathResult.STRING_TYPE, null);
         console.log(stringtaskpathresult);
