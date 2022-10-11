@@ -5,6 +5,7 @@ xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         getStages(xhttp.responseXML);
         getActorsofStages(xhttp.responseXML);
+        getStagesofActors(xhttp.responseXML);
     }
 };
 xhttp.open("GET", "Colorectal Cancer Patient Pathway.xml", true);
@@ -35,7 +36,9 @@ function getActorsofStages(xml){
     let stageidpath = "//*[local-name()='categoryValue']/@id";
     let allstageids = xml.evaluate(stageidpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
 
-    let actornamepath = "//*[local-name()='categoryValue']/*[local-name()='extensionElements']/*/@name";
+    //let actornamepath = "//*[local-name()='categoryValue']/*[local-name()='extensionElements']/*/@name";
+
+
     let txt ="The Tasks in the XML are: <br>";
     console.log(allstages.snapshotLength);
     for(let i = 0; i <allstages.snapshotLength; i++){
@@ -68,6 +71,70 @@ function getActorsofStages(xml){
 
 function getStagesofActors(xml){
 
+    let txt = "Actors and involved Stages: " + "<br>";
+
+     let SetOfActors = new Set();
+
+    //stageIDs + names will be stored in another Map
+    let MapOfStages = new Map();
+    let stageidpath = "//*[local-name()='categoryValue']/@id";
+    let stagenamepath = "//*[local-name()='categoryValue']/@value";
+
+    // store all id's and names in snapshots and add them to the map
+    let allstageids = xml.evaluate(stageidpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    let allstagenames = xml.evaluate(stagenamepath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    for (let i = 0; i < allstageids.snapshotLength; i++){
+        MapOfStages.set(allstageids.snapshotItem(i).textContent, allstagenames.snapshotItem(i).textContent);
+        let actorsinstages = "//*[local-name()='categoryValue' and @id='" +allstageids.snapshotItem(i).textContent + "']/*[local-name()='extensionElements']/*/@name";
+        console.log(actorsinstages);
+        let allactors = xml.evaluate(actorsinstages, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (let i = 0; i < allactors.snapshotLength; i++){
+            SetOfActors.add(allactors.snapshotItem(i).textContent);
+        }
+
+    }
+    console.log(SetOfActors);
+    console.log(SetOfActors.size);
+
+    // create an iterator to travers through the set of Actors
+    const ActorSetIterator = SetOfActors.values();
+
+    // create an iterator to travers through the Map-keys of the MapOfStages
+    const StageMapIterator = MapOfStages.keys();
+
+    // for each Actor in the Set: check in which stages they participate
+
+    let stageamountpath = "count(//*[local-name()='categoryValue'])";
+    let amountofstages = xml.evaluate(stageamountpath, xml, null, XPathResult.NUMBER_TYPE, null);
+    console.log(amountofstages);
+
+    for (let i = 0; i < SetOfActors.size; i++){
+        let CurrentActor = ActorSetIterator.next().value;
+        txt+= "Actor: " + CurrentActor + " is required in Stages: ";
+        console.log(amountofstages.numberValue);
+
+        console.log(StageMapIterator.next().value);
+
+
+        for (let j = 0; j < amountofstages.numberValue; j++){
+
+            // get the stageIDs in a Snapshot
+            currentstageIDpath = "//*[local-name()='categoryValue']/@id";
+            let currentstageID = xml.evaluate(currentstageIDpath, xml, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+
+            let actorcheckpath = "boolean(//*[local-name()='categoryValue' and @id='"+ currentstageID.snapshotItem(j).textContent + "']/*[local-name()='extensionElements']/*/@name='" +CurrentActor  +"')";
+            console.log(actorcheckpath);
+            let isActorinStage = xml.evaluate(actorcheckpath, xml, null, XPathResult.BOOLEAN_TYPE, null);
+            console.log(isActorinStage);
+            if (isActorinStage.booleanValue === true){
+                // add this Stage to the txt
+                // get the name of the stage with a known stageID
+                let stagename = MapOfStages.get(currentstageID.snapshotItem(j).textContent);
+                txt += stagename +  ", ";
+            }
+        }
+        txt += "<br>";
+    }
 
     document.getElementById("Actors_and_Stages_involved").innerHTML =txt;
 }
