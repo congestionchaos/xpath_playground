@@ -4,6 +4,7 @@ var path;
 xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         getStages(xhttp.responseXML);
+        HelperAllStages();
         getActorsofStages(xhttp.responseXML);
         getStagesofActors(xhttp.responseXML);
     }
@@ -18,6 +19,7 @@ function getStages(xml) {
     // XPathResult Type cannot be "ANY_TYPE" because then the Result would be of "UNORDERED_ITERATOR_TYPE"
     // the for-loop would not work on an Iterator-Type Result
     console.log(allstages);
+
     let txt = "The Stages in the XML are: <br>";
     for (let i = 0; i < allstages.snapshotLength; i++) {
         console.log("testing the loop.." + "this is loop nr." + i);
@@ -27,6 +29,22 @@ function getStages(xml) {
     console.log(txt);
     document.getElementById("Stages").innerHTML = txt;
 }
+
+function HelperAllStages(){
+    let xml = xhttp.responseXML;
+    let stagevaluepath = "//*[local-name()='categoryValue']/@value";
+    let allstages = xml.evaluate(stagevaluepath, xml, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+    let unsortedSetofStages = new Set();
+    for (let i = 0; i < allstages.snapshotLength; i++) {
+        unsortedSetofStages.add(allstages.snapshotItem(i).textContent);
+    }
+    console.log(unsortedSetofStages);
+    const ArrayOfStages = Array.from(unsortedSetofStages);
+    console.log(ArrayOfStages);
+    return ArrayOfStages;
+}
+
+
 
 function getActorsofStages(xml){
     // copy-pasta from getTaskIDwithSnapshot function:
